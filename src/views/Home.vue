@@ -75,6 +75,9 @@
         </v-card>
       </v-dialog>
     </v-col>
+    <v-snackbar v-model="snackbar" color="success" top
+      >Activity Successfully Added!</v-snackbar
+    >
   </v-row>
 </template>
 
@@ -180,6 +183,7 @@ export default {
           cycle: "1 of 10",
         },
       ],
+      snackbar: false,
     };
   },
   methods: {
@@ -278,6 +282,8 @@ export default {
       });
 
       this.dialog = false;
+
+      this.snackbar = true;
 
       this.category = "";
       this.level = "";
