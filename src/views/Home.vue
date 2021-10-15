@@ -228,6 +228,7 @@ export default {
         reg.showNotification(activity.category, {
           icon: "/img/icons/android-chrome-192x192.png",
           body: "This is your daily Well Beeing reminder!",
+          image: this.imageURL(activity.category),
           actions: [
             {
               title: "View Video",
@@ -282,6 +283,25 @@ export default {
       this.level = "";
       this.frequency = "";
     },
+    imageURL(category) {
+      if (category == "Yoga") {
+        return "/img/yoga.jpg";
+      } else if (category == "Meditation") {
+        return "/img/meditate.jpg";
+      } else if (category == "Stress Relief") {
+        return "/img/stress-relief.jpg";
+      } else if (category == "Endurance") {
+        return "/img/endurance.jpg";
+      } else if (category == "Challenge") {
+        return "/img/challenge.jpg";
+      } else if (category == "Muscle Tone/Movement") {
+        return "/img/weight-training.jpg";
+      } else if (category == "Stretching") {
+        return "/img/stretching.jpg";
+      } else if (category == "Nutrition") {
+        return "/img/nutrition.jpg";
+      }
+    },
   },
   computed: {
     //
@@ -291,3 +311,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+::v-deep .text-start:first-child {
+  font-weight: 600;
+}
+::v-deep tr:hover {
+  cursor: pointer;
+}
+</style>
