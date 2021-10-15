@@ -146,7 +146,7 @@ export default {
         : "primary";
     },
     async notifyMe(activity) {
-      console.log(activity);
+      const reg = await navigator.serviceWorker.getRegistration();
       // Let's check if the browser supports notifications
       if (!("Notification" in window)) {
         alert("This browser does not support desktop notification");
@@ -155,9 +155,6 @@ export default {
       // Let's check whether notification permissions have already been granted
       else if (Notification.permission === "granted") {
         // If it's okay let's create a notification
-        const reg = await navigator.serviceWorker.getRegistration();
-        const timestamp = new Date().getTime() + 5 * 1000; // now plus 5000ms
-
         reg.showNotification(activity.category, {
           icon: "/img/icons/android-chrome-192x192.png",
           body: "This is your daily Well Beeing reminder!",
@@ -179,7 +176,20 @@ export default {
         Notification.requestPermission().then(function(permission) {
           // If the user accepts, let's create a notification
           if (permission === "granted") {
-            var notification = new Notification("Hi there!");
+            reg.showNotification(activity.category, {
+              icon: "/img/icons/android-chrome-192x192.png",
+              body: "This is your daily Well Beeing reminder!",
+              actions: [
+                {
+                  title: "View Video",
+                  action: "view-video",
+                },
+                {
+                  title: "Snooze",
+                  action: "snooze",
+                },
+              ],
+            });
           }
         });
       }
