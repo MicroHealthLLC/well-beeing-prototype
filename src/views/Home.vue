@@ -3,7 +3,7 @@
     <v-col>
       <div class="d-flex justify-space-between mt-4">
         <h1>My Activities</h1>
-        <v-btn color="info">Add New</v-btn>
+        <v-btn @click="dialog = true" color="info">Add New</v-btn>
       </div>
 
       <v-data-table @click:row="notifyMe" :headers="headers" :items="items">
@@ -19,7 +19,61 @@
           }}</v-chip>
         </template>
       </v-data-table>
-      <v-btn @click="notifyMe">Notify</v-btn>
+      <!-- Form Dialog -->
+      <v-dialog v-model="dialog" max-width="600px">
+        <v-card>
+          <v-card-title>Add New Activity</v-card-title>
+          <v-card-text>
+            <v-select
+              v-model="category"
+              :items="categories"
+              label="Category"
+            ></v-select>
+            <v-select
+              v-model="level"
+              :items="['Beginner', 'Intermediate', 'Advanced']"
+              label="Level"
+            ></v-select>
+            <v-select
+              v-model="frequency"
+              :items="['Daily', 'Mon/Wed/Fri', 'Tues/Thurs']"
+              label="Frequency"
+            ></v-select>
+            <v-menu
+              ref="menu"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              :return-value.sync="time"
+              transition="scale-transition"
+              offset-y
+              max-width="290px"
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="time"
+                  label="Scheduled Time"
+                  prepend-icon="mdi-clock-time-four-outline"
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-time-picker
+                v-model="time"
+                format="ampm"
+                @click:minute="$refs.menu.save(time)"
+              ></v-time-picker>
+            </v-menu>
+          </v-card-text>
+          <v-card-actions class="d-flex justify-end">
+            <v-btn @click="addActivity" class="px-6" color="info">Submit</v-btn>
+            <v-btn @click="dialog = false" color="secondary" outlined
+              >Cancel</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-col>
   </v-row>
 </template>
@@ -29,6 +83,23 @@ export default {
   name: "Home",
   data() {
     return {
+      dialog: false,
+      category: "",
+      level: "",
+      frequency: "",
+      time: null,
+      categories: [
+        "Challenge",
+        "Endurance",
+        "Ergonomics",
+        "Meditation",
+        "Muscle Tone/Movement",
+        "Nutrition",
+        "Posture",
+        "Stress Relief",
+        "Stretching",
+        "Yoga",
+      ],
       headers: [
         {
           text: "Category",
@@ -55,63 +126,62 @@ export default {
         {
           category: "Yoga",
           frequency: "Daily",
-          time: "12:00PM",
+          time: "12:00",
           level: "Intermediate",
-          cycle: 1,
+          cycle: "1 of 10",
         },
         {
           category: "Meditation",
-          frequency: "Daily",
-          time: "3:00PM",
+          frequency: "Mon/Wed/Fri",
+          time: "14:30",
           level: "Beginner",
-          cycle: 1,
+          cycle: "1 of 10",
         },
         {
           category: "Stress Relief",
           frequency: "Daily",
-          time: "9:00AM",
+          time: "09:00",
           level: "Advanced",
-          cycle: 1,
+          cycle: "1 of 10",
         },
         {
           category: "Endurance",
           frequency: "Daily",
-          time: "10:00AM",
+          time: "10:00",
           level: "Advanced",
-          cycle: 1,
+          cycle: "1 of 10",
         },
         {
           category: "Ergonomics",
-          frequency: "Daily",
-          time: "8:00AM",
+          frequency: "Mon/Wed/Fri",
+          time: "08:00",
           level: "Beginner",
-          cycle: 1,
+          cycle: "1 of 10",
         },
         {
           category: "Challenge",
           frequency: "Daily",
-          time: "5:00PM",
+          time: "05:00",
           level: "Advanced",
-          cycle: 1,
+          cycle: "1 of 10",
         },
         {
           category: "Muscle Tone/Movement",
-          frequency: "Daily",
-          time: "4:00PM",
+          frequency: "Tues/Thurs",
+          time: "22:00",
           level: "Advanced",
-          cycle: 1,
+          cycle: "1 of 10",
         },
         {
           category: "Stretching",
           frequency: "Daily",
-          time: "3:00PM",
+          time: "11:00",
           level: "Intermediate",
-          cycle: 1,
+          cycle: "1 of 10",
         },
       ],
     };
   },
-  // Stress relief, Meditation, Yoga, Stretching, Posture, Ergonomics, Muscle Tone/Movement, Nutrition, Endurance, Challenges
   methods: {
     categoryIcon(category) {
       return category == "Yoga"
@@ -196,6 +266,21 @@ export default {
 
       // At last, if the user has denied notifications, and you
       // want to be respectful there is no need to bother them any more.
+    },
+    addActivity() {
+      this.items.unshift({
+        category: this.category,
+        level: this.level,
+        frequency: this.frequency,
+        time: this.time,
+        cycle: "1 of 10",
+      });
+
+      this.dialog = false;
+
+      this.category = "";
+      this.level = "";
+      this.frequency = "";
     },
   },
   computed: {
