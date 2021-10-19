@@ -61,7 +61,7 @@
               </template>
               <v-time-picker
                 v-model="time"
-                format="ampm"
+                format="24hr"
                 @click:minute="$refs.menu.save(time)"
               ></v-time-picker>
             </v-menu>
@@ -282,7 +282,6 @@ export default {
       });
 
       this.dialog = false;
-
       this.snackbar = true;
 
       this.category = "";
@@ -308,12 +307,28 @@ export default {
         return "/img/nutrition.jpg";
       }
     },
+    checkReminders() {
+      const now = new Date();
+
+      const minutes = now.getMinutes();
+      const hour = now.getHours();
+
+      this.items.forEach((reminder) => {
+        const time = reminder.time.split(":");
+        if (time[0] == hour && time[1] == minutes) {
+          console.log("Reminder found: Display Notification");
+          this.notifyMe(reminder);
+        } else {
+          console.log("Reminder not found");
+        }
+      });
+    },
   },
   computed: {
     //
   },
-  mounted() {
-    //
+  async mounted() {
+    setInterval(this.checkReminders, 10000);
   },
 };
 </script>
