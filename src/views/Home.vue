@@ -4,9 +4,13 @@
       <div class="d-flex justify-space-between my-4">
         <div class="d-flex">
           <h2>My Activity Reminders</h2>
-          <v-switch v-model="remind" class="mt-1 ml-3" color="#2f53b6"></v-switch>
+          <v-switch
+            v-model="remind"
+            class="mt-1 ml-3"
+            color="#2f53b6"
+          ></v-switch>
         </div>
-        <v-btn @click="dialog = true" color="#2f53b6" dark>Add New</v-btn>
+        <v-btn @click="openForm" color="#2f53b6" dark>Add New</v-btn>
       </div>
 
       <v-data-table @click:row="notifyMe" :headers="headers" :items="reminders">
@@ -27,51 +31,63 @@
         <v-card>
           <v-card-title>Add New Activity Reminder</v-card-title>
           <v-card-text>
-            <v-select
-              v-model="category"
-              :items="categories"
-              label="Category"
-            ></v-select>
-            <v-select
-              v-model="level"
-              :items="['Beginner', 'Intermediate', 'Advanced']"
-              label="Level"
-            ></v-select>
-            <v-select
-              v-model="frequency"
-              :items="['Daily', 'Mon/Wed/Fri', 'Tues/Thurs']"
-              label="Frequency"
-            ></v-select>
-            <v-menu
-              ref="menu"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              :return-value.sync="time"
-              transition="scale-transition"
-              offset-y
-              max-width="290px"
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
+            <v-form ref="form" v-model="valid">
+              <v-select
+                v-model="category"
+                :items="categories"
+                label="Category"
+                :rules="[(v) => !!v || 'Category is required']"
+                required
+              ></v-select>
+              <v-select
+                v-model="level"
+                :items="['Beginner', 'Intermediate', 'Advanced']"
+                label="Level"
+                :rules="[(v) => !!v || 'Level is required']"
+                required
+              ></v-select>
+              <v-select
+                v-model="frequency"
+                :items="['Daily', 'Mon/Wed/Fri', 'Tues/Thurs']"
+                label="Frequency"
+                :rules="[(v) => !!v || 'Frequency is required']"
+                required
+              ></v-select>
+              <v-menu
+                ref="menu"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                :return-value.sync="time"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="time"
+                    label="Scheduled Time"
+                    prepend-icon="mdi-clock-time-four-outline"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                    :rules="[(v) => !!v || 'Time is required']"
+                    required
+                  ></v-text-field>
+                </template>
+                <v-time-picker
                   v-model="time"
-                  label="Scheduled Time"
-                  prepend-icon="mdi-clock-time-four-outline"
-                  readonly
-                  v-bind="attrs"
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-time-picker
-                v-model="time"
-                format="24hr"
-                @click:minute="$refs.menu.save(time)"
-                header-color="var(--mh-blue)"
-              ></v-time-picker>
-            </v-menu>
+                  format="24hr"
+                  @click:minute="$refs.menu.save(time)"
+                  header-color="var(--mh-blue)"
+                ></v-time-picker>
+              </v-menu>
+            </v-form>
           </v-card-text>
           <v-card-actions class="d-flex justify-end">
-            <v-btn @click="addActivity" class="px-6" color="var(--mh-blue)" dark>Submit</v-btn>
+            <v-btn @click="addActivity" class="px-6" color="var(--mh-blue)" dark
+              >Submit</v-btn
+            >
             <v-btn @click="dialog = false" color="secondary" outlined
               >Cancel</v-btn
             >
@@ -93,6 +109,7 @@ export default {
       dialog: false,
       remind: false,
       intervalId: null,
+      valid: true,
       category: "",
       level: "",
       frequency: "",
@@ -278,21 +295,27 @@ export default {
       // At last, if the user has denied notifications, and you
       // want to be respectful there is no need to bother them any more.
     },
+    openForm() {
+      this.dialog = true;
+      this.$refs.form.resetValidation();
+    },
     addActivity() {
-      this.reminders.unshift({
-        category: this.category,
-        level: this.level,
-        frequency: this.frequency,
-        time: this.time,
-        cycle: "1 of 10",
-      });
+      if (this.$refs.form.validate()) {
+        this.reminders.unshift({
+          category: this.category,
+          level: this.level,
+          frequency: this.frequency,
+          time: this.time,
+          cycle: "1 of 10",
+        });
 
-      this.dialog = false;
-      this.snackbar = true;
+        this.dialog = false;
+        this.snackbar = true;
 
-      this.category = "";
-      this.level = "";
-      this.frequency = "";
+        this.category = "";
+        this.level = "";
+        this.frequency = "";
+      }
     },
     imageURL(category) {
       if (category == "Yoga") {
