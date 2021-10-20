@@ -13,7 +13,7 @@
         <v-btn @click="openForm" color="#2f53b6" dark>Add New</v-btn>
       </div>
 
-      <v-data-table @click:row="notifyMe" :headers="headers" :items="reminders">
+      <v-data-table :headers="headers" :items="reminders">
         <template v-slot:item.category="{ item }">
           <span
             ><v-icon class="mr-4">{{ categoryIcon(item.category) }}</v-icon>
@@ -24,6 +24,11 @@
           <v-chip small :color="levelColor(item.level)" dark>{{
             item.level
           }}</v-chip>
+        </template>
+        <template v-slot:item.actions="{ item, index }">
+          <v-btn @click="deleteReminder(item, index)" color="var(--mh-orange)" outlined small depressed
+            >Delete</v-btn
+          >
         </template>
       </v-data-table>
       <!-- Form Dialog -->
@@ -146,66 +151,11 @@ export default {
         {
           text: "Cycle",
           value: "cycle",
+          sortable: false,
         },
+        { text: "Actions", value: "actions", sortable: false },
       ],
-      reminders: [
-        {
-          category: "Yoga",
-          frequency: "Daily",
-          time: "12:00",
-          level: "Intermediate",
-          cycle: "1 of 10",
-        },
-        {
-          category: "Meditation",
-          frequency: "Mon/Wed/Fri",
-          time: "14:30",
-          level: "Beginner",
-          cycle: "1 of 10",
-        },
-        {
-          category: "Stress Relief",
-          frequency: "Daily",
-          time: "09:00",
-          level: "Advanced",
-          cycle: "1 of 10",
-        },
-        {
-          category: "Endurance",
-          frequency: "Daily",
-          time: "10:00",
-          level: "Advanced",
-          cycle: "1 of 10",
-        },
-        {
-          category: "Ergonomics",
-          frequency: "Mon/Wed/Fri",
-          time: "08:00",
-          level: "Beginner",
-          cycle: "1 of 10",
-        },
-        {
-          category: "Challenge",
-          frequency: "Daily",
-          time: "05:00",
-          level: "Advanced",
-          cycle: "1 of 10",
-        },
-        {
-          category: "Muscle Tone/Movement",
-          frequency: "Tues/Thurs",
-          time: "22:00",
-          level: "Advanced",
-          cycle: "1 of 10",
-        },
-        {
-          category: "Stretching",
-          frequency: "Daily",
-          time: "11:00",
-          level: "Intermediate",
-          cycle: "1 of 10",
-        },
-      ],
+      reminders: [],
       snackbar: false,
     };
   },
@@ -297,7 +247,9 @@ export default {
     },
     openForm() {
       this.dialog = true;
-      this.$refs.form.resetValidation();
+      if (this.$refs.form) {
+        this.$refs.form.resetValidation();
+      }
     },
     addActivity() {
       if (this.$refs.form.validate()) {
@@ -361,6 +313,9 @@ export default {
       } else {
         return [0, 1, 2, 3, 4, 5, 6];
       }
+    },
+    deleteReminder(reminder, index) {
+      this.reminders.splice(index, 1);
     },
   },
   computed: {
