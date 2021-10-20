@@ -1,12 +1,15 @@
 <template>
   <v-row>
     <v-col>
-      <div class="d-flex justify-space-between mt-4">
-        <h1>My Activities</h1>
+      <div class="d-flex justify-space-between my-4">
+        <div class="d-flex">
+          <h2>My Activity Reminders</h2>
+          <v-switch v-model="remind" class="mt-1 ml-3"></v-switch>
+        </div>
         <v-btn @click="dialog = true" color="info">Add New</v-btn>
       </div>
 
-      <v-data-table @click:row="notifyMe" :headers="headers" :items="items">
+      <v-data-table @click:row="notifyMe" :headers="headers" :items="reminders">
         <template v-slot:item.category="{ item }">
           <span
             ><v-icon class="mr-4">{{ categoryIcon(item.category) }}</v-icon>
@@ -87,6 +90,8 @@ export default {
   data() {
     return {
       dialog: false,
+      remind: false,
+      intervalId: null,
       category: "",
       level: "",
       frequency: "",
@@ -125,7 +130,7 @@ export default {
           value: "cycle",
         },
       ],
-      items: [
+      reminders: [
         {
           category: "Yoga",
           frequency: "Daily",
@@ -273,7 +278,7 @@ export default {
       // want to be respectful there is no need to bother them any more.
     },
     addActivity() {
-      this.items.unshift({
+      this.reminders.unshift({
         category: this.category,
         level: this.level,
         frequency: this.frequency,
@@ -312,8 +317,9 @@ export default {
 
       const minutes = now.getMinutes();
       const hour = now.getHours();
+      const day = now.getDay();
 
-      this.items.forEach((reminder) => {
+      this.filteredReminders.forEach((reminder) => {
         const time = reminder.time.split(":");
         if (time[0] == hour && time[1] == minutes) {
           console.log("Reminder found: Display Notification");
@@ -323,12 +329,38 @@ export default {
         }
       });
     },
+    frequencyDays(frequency) {
+      if (frequency == "Mon/Wed/Fri") {
+        return [1, 3, 5];
+      } else if (frequency == "Tues/Thurs") {
+        return [2, 4];
+      } else {
+        return [0, 1, 2, 3, 4, 5, 6];
+      }
+    },
   },
   computed: {
-    //
+    filteredReminders() {
+      const now = new Date();
+      const day = now.getDay();
+
+      return this.reminders.filter((reminder) =>
+        this.frequencyDays(reminder.frequency).includes(day)
+      );
+    },
   },
   async mounted() {
-    setInterval(this.checkReminders, 10000);
+    this.remind = true;
+  },
+  watch: {
+    remind(newSwitchValue, oldSwitchValue) {
+      if (newSwitchValue) {
+        this.intervalId = setInterval(this.checkReminders, 60000);
+      } else {
+        clearInterval(this.intervalId);
+        this.intervalId = null;
+      }
+    },
   },
 };
 </script>
