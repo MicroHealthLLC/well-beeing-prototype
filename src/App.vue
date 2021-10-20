@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
+    <v-app-bar app color="var(--mh-blue)" dark>
       <div class="d-flex align-center">
         <h2>Well Beeing</h2>
       </div>
@@ -29,3 +29,11 @@ export default {
   }),
 };
 </script>
+
+<style>
+:root {
+  --mh-blue: #1d336f;
+  --mh-green: #9ec64c;
+  --mh-orange: #dd9036;
+}
+</style>

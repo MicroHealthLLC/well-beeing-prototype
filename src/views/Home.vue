@@ -4,9 +4,9 @@
       <div class="d-flex justify-space-between my-4">
         <div class="d-flex">
           <h2>My Activity Reminders</h2>
-          <v-switch v-model="remind" class="mt-1 ml-3"></v-switch>
+          <v-switch v-model="remind" class="mt-1 ml-3" color="#2f53b6"></v-switch>
         </div>
-        <v-btn @click="dialog = true" color="info">Add New</v-btn>
+        <v-btn @click="dialog = true" color="#2f53b6" dark>Add New</v-btn>
       </div>
 
       <v-data-table @click:row="notifyMe" :headers="headers" :items="reminders">
@@ -17,7 +17,7 @@
           >
         </template>
         <template v-slot:item.level="{ item }">
-          <v-chip small :color="levelColor(item.level)">{{
+          <v-chip small :color="levelColor(item.level)" dark>{{
             item.level
           }}</v-chip>
         </template>
@@ -25,7 +25,7 @@
       <!-- Form Dialog -->
       <v-dialog v-model="dialog" max-width="600px">
         <v-card>
-          <v-card-title>Add New Activity</v-card-title>
+          <v-card-title>Add New Activity Reminder</v-card-title>
           <v-card-text>
             <v-select
               v-model="category"
@@ -66,11 +66,12 @@
                 v-model="time"
                 format="24hr"
                 @click:minute="$refs.menu.save(time)"
+                header-color="var(--mh-blue)"
               ></v-time-picker>
             </v-menu>
           </v-card-text>
           <v-card-actions class="d-flex justify-end">
-            <v-btn @click="addActivity" class="px-6" color="info">Submit</v-btn>
+            <v-btn @click="addActivity" class="px-6" color="var(--mh-blue)" dark>Submit</v-btn>
             <v-btn @click="dialog = false" color="secondary" outlined
               >Cancel</v-btn
             >
@@ -217,9 +218,9 @@ export default {
     },
     levelColor(level) {
       return level == "Beginner"
-        ? "success"
+        ? "var(--mh-green)"
         : level == "Intermediate"
-        ? "warning"
+        ? "var(--mh-orange)"
         : level == "Advanced"
         ? "error"
         : "primary";

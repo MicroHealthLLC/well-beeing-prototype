@@ -2,7 +2,7 @@ module.exports = {
   transpileDependencies: ["vuetify"],
   pwa: {
     name: "Well Being Prototype",
-    themeColor: "#9ec64c",
+    themeColor: "#1d336f",
     msTileColor: "#000000",
     appleMobileWebAppCapable: "yes",
     appleMobileWebAppStatusBarStyle: "black",
