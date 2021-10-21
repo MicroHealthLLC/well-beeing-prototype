@@ -46,7 +46,8 @@
         </template>
         <template v-slot:no-data>
           <div class="mt-4">
-            <v-icon color="grey" x-large>mdi-alarm</v-icon><p>No Activity Reminders</p>
+            <v-icon color="grey" x-large>mdi-alarm</v-icon>
+            <p>No Activity Reminders</p>
           </div>
         </template>
       </v-data-table>
@@ -286,6 +287,9 @@ export default {
         this.category = "";
         this.level = "";
         this.frequency = "";
+
+        const parsed = JSON.stringify(this.reminders);
+        localStorage.setItem("reminders", parsed);
       }
     },
     imageURL(category) {
@@ -335,6 +339,9 @@ export default {
     },
     deleteReminder(reminder, index) {
       this.reminders.splice(index, 1);
+
+      const parsed = JSON.stringify(this.reminders);
+      localStorage.setItem("reminders", parsed);
     },
   },
   computed: {
@@ -347,8 +354,16 @@ export default {
       );
     },
   },
-  async mounted() {
+  mounted() {
     this.remind = true;
+
+    if (localStorage.getItem("reminders")) {
+      try {
+        this.reminders = JSON.parse(localStorage.getItem("reminders"));
+      } catch (e) {
+        localStorage.removeItem("reminders");
+      }
+    }
   },
   watch: {
     remind(newSwitchValue, oldSwitchValue) {
