@@ -44,6 +44,11 @@
             >Delete</v-btn
           >
         </template>
+        <template v-slot:no-data>
+          <div class="mt-4">
+            <v-icon color="grey" x-large>mdi-alarm</v-icon><p>No Activity Reminders</p>
+          </div>
+        </template>
       </v-data-table>
       <!-- Form Dialog -->
       <v-dialog v-model="dialog" max-width="600px">
@@ -364,5 +369,8 @@ export default {
 }
 ::v-deep tr:hover {
   cursor: pointer;
+}
+::v-deep tr.v-data-table__empty-wrapper {
+  margin: auto;
 }
 </style>
