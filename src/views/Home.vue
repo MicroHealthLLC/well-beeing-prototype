@@ -26,7 +26,21 @@
           }}</v-chip>
         </template>
         <template v-slot:item.actions="{ item, index }">
-          <v-btn @click="deleteReminder(item, index)" color="var(--mh-orange)" outlined small depressed
+          <v-btn
+            @click="notifyMe(item)"
+            class="mr-3"
+            color="var(--mh-blue)"
+            outlined
+            x-small
+            title="Test Notification: Prototype Only"
+            >Test</v-btn
+          >
+          <v-btn
+            @click="deleteReminder(item, index)"
+            color="var(--mh-orange)"
+            outlined
+            x-small
+            depressed
             >Delete</v-btn
           >
         </template>
