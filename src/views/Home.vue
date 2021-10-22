@@ -1,16 +1,24 @@
 <template>
   <v-row>
     <v-col>
-      <div class="d-flex justify-space-between my-4">
-        <div class="d-flex">
-          <h2>My Activity Reminders</h2>
+      <div class="d-sm-flex justify-space-between align-center my-2 my-sm-4">
+        <div class="d-flex justify-space-between align-center">
+          <span class="text-h6 text-sm-h5">My Activity Reminders</span>
           <v-switch
             v-model="remind"
             class="mt-1 ml-3"
             color="#2f53b6"
+            hide-details
           ></v-switch>
         </div>
-        <v-btn @click="openForm" color="#2f53b6" dark>Add New</v-btn>
+        <v-btn
+          @click="openForm"
+          class="my-5 my-sm-0"
+          color="#2f53b6"
+          dark
+          :block="$vuetify.breakpoint.xsOnly"
+          >Add New</v-btn
+        >
       </div>
       <!-- Activity Reminders Table -->
       <v-data-table :headers="headers" :items="reminders">
@@ -272,7 +280,7 @@ export default {
         this.SET_SNACKBAR({
           show: true,
           message: "Activity Successfully Added!",
-          color: "success",
+          color: "var(--mh-green)",
         });
         // Reset form values
         this.resetForm();
