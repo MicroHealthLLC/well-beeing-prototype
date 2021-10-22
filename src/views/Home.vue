@@ -12,7 +12,7 @@
         </div>
         <v-btn @click="openForm" color="#2f53b6" dark>Add New</v-btn>
       </div>
-
+      <!-- Activity Reminders Table -->
       <v-data-table :headers="headers" :items="reminders">
         <template v-slot:item.category="{ item }">
           <span
@@ -27,7 +27,7 @@
         </template>
         <template v-slot:item.actions="{ item, index }">
           <v-btn
-            @click="notifyMe(item)"
+            @click="notify(item)"
             class="mr-3"
             color="var(--mh-blue)"
             outlined
@@ -110,7 +110,7 @@
             </v-form>
           </v-card-text>
           <v-card-actions class="d-flex justify-end">
-            <v-btn @click="addActivity" class="px-6" color="var(--mh-blue)" dark
+            <v-btn @click="addReminder" class="px-6" color="var(--mh-blue)" dark
               >Submit</v-btn
             >
             <v-btn @click="dialog = false" color="secondary" outlined
@@ -120,6 +120,7 @@
         </v-card>
       </v-dialog>
     </v-col>
+    <!-- Add Success Message -->
     <v-snackbar v-model="snackbar" color="success" top
       >Activity Successfully Added!</v-snackbar
     >
@@ -151,6 +152,18 @@ export default {
         "Stretching",
         "Yoga",
       ],
+      categoryIcons: {
+        Challenge: "mdi-trophy-award",
+        Endurance: "mdi-run",
+        Ergonomics: "mdi-seat-recline-extra",
+        Meditation: "mdi-meditation",
+        "Muscle Tone/Movement": "mdi-weight-lifter",
+        Nutrition: "mdi-food-apple",
+        Posture: "mdi-human-male",
+        "Stress Relief": "mdi-head-heart",
+        Stretching: "mdi-human",
+        Yoga: "mdi-yoga",
+      },
       headers: [
         {
           text: "Category",
@@ -173,35 +186,113 @@ export default {
           value: "cycle",
           sortable: false,
         },
-        { text: "Actions", value: "actions", sortable: false },
+        {
+          text: "Actions",
+          value: "actions",
+          sortable: false,
+        },
       ],
+      imageURLs: {
+        Challenge: "/img/challenge.jpg",
+        Endurance: "/img/endurance.jpg",
+        Ergonomics: "",
+        Meditation: "/img/meditate.jpg",
+        "Muscle Tone/Movement": "/img/weight-training.jpg",
+        Nutrition: "/img/nutrition.jpg",
+        Posture: "",
+        "Stress Relief": "/img/stress-relief.jpg",
+        Stretching: "/img/stretching.jpg",
+        Yoga: "/img/yoga.jpg",
+      },
       reminders: [],
       snackbar: false,
     };
   },
   methods: {
+    async notify(activity) {
+      const reg = await navigator.serviceWorker.getRegistration();
+      // Let's check if the browser supports notifications
+      if (!("Notification" in window)) {
+        alert("This browser does not support desktop notification");
+      }
+      // Let's check whether notification permissions have already been granted
+      else if (Notification.permission === "granted") {
+        // If it's okay let's create a notification
+        reg.showNotification(activity.category, this.notification(activity));
+      }
+      // Otherwise, we need to ask the user for permission
+      else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(function(permission) {
+          // If the user accepts, let's create a notification
+          if (permission === "granted") {
+            reg.showNotification(
+              activity.category,
+              this.notification(activity)
+            );
+          }
+        });
+      }
+    },
+    // Helper method for notify - Provides Notification options
+    notification(activity) {
+      return {
+        icon: "/img/icons/android-chrome-192x192.png",
+        body: "This is your daily Well Beeing reminder!",
+        image: this.imageURL(activity.category),
+        actions: [
+          {
+            title: "View Content",
+            action: "view-content",
+          },
+          {
+            title: "Snooze",
+            action: "snooze",
+          },
+        ],
+      };
+    },
+    openForm() {
+      this.dialog = true;
+      if (this.$refs.form) {
+        this.$refs.form.resetValidation();
+      }
+    },
+    addReminder() {
+      if (this.$refs.form.validate()) {
+        this.reminders.unshift({
+          category: this.category,
+          level: this.level,
+          frequency: this.frequency,
+          time: this.time,
+          cycle: "1 of 10",
+        });
+        // Convert and add reminders array to local storage
+        const parsed = JSON.stringify(this.reminders);
+        localStorage.setItem("reminders", parsed);
+        // Close form and display success message
+        this.dialog = false;
+        this.snackbar = true;
+        // Reset form values
+        this.resetForm();
+      }
+    },
+    deleteReminder(reminder, index) {
+      this.reminders.splice(index, 1);
+      // Convert and update reminders array to local storage
+      const parsed = JSON.stringify(this.reminders);
+      localStorage.setItem("reminders", parsed);
+    },
+    resetForm() {
+      this.category = "";
+      this.level = "";
+      this.frequency = "";
+      this.time = null;
+    },
+    imageURL(category) {
+      return this.imageURLs[category] || "";
+    },
     categoryIcon(category) {
-      return category == "Yoga"
-        ? "mdi-yoga"
-        : category == "Meditation"
-        ? "mdi-meditation"
-        : category == "Stress Relief"
-        ? "mdi-head-heart"
-        : category == "Endurance"
-        ? "mdi-run"
-        : category == "Ergonomics"
-        ? "mdi-seat-recline-extra"
-        : category == "Challenge"
-        ? "mdi-trophy-award"
-        : category == "Muscle Tone/Movement"
-        ? "mdi-weight-lifter"
-        : category == "Stretching"
-        ? "mdi-human"
-        : category == "Posture"
-        ? "mdi-human-male"
-        : category == "Nutrition"
-        ? "mdi-food-apple"
-        : "mdi-run";
+      return this.categoryIcons[category] || "";
     },
     levelColor(level) {
       return level == "Beginner"
@@ -212,117 +303,18 @@ export default {
         ? "error"
         : "primary";
     },
-    async notifyMe(activity) {
-      const reg = await navigator.serviceWorker.getRegistration();
-      // Let's check if the browser supports notifications
-      if (!("Notification" in window)) {
-        alert("This browser does not support desktop notification");
-      }
-
-      // Let's check whether notification permissions have already been granted
-      else if (Notification.permission === "granted") {
-        // If it's okay let's create a notification
-        reg.showNotification(activity.category, {
-          icon: "/img/icons/android-chrome-192x192.png",
-          body: "This is your daily Well Beeing reminder!",
-          image: this.imageURL(activity.category),
-          actions: [
-            {
-              title: "View Video",
-              action: "view-video",
-            },
-            {
-              title: "Snooze",
-              action: "snooze",
-            },
-          ],
-        });
-      }
-
-      // Otherwise, we need to ask the user for permission
-      else if (Notification.permission !== "denied") {
-        Notification.requestPermission().then(function(permission) {
-          // If the user accepts, let's create a notification
-          if (permission === "granted") {
-            reg.showNotification(activity.category, {
-              icon: "/img/icons/android-chrome-192x192.png",
-              body: "This is your daily Well Beeing reminder!",
-              actions: [
-                {
-                  title: "View Video",
-                  action: "view-video",
-                },
-                {
-                  title: "Snooze",
-                  action: "snooze",
-                },
-              ],
-            });
-          }
-        });
-      }
-
-      // At last, if the user has denied notifications, and you
-      // want to be respectful there is no need to bother them any more.
-    },
-    openForm() {
-      this.dialog = true;
-      if (this.$refs.form) {
-        this.$refs.form.resetValidation();
-      }
-    },
-    addActivity() {
-      if (this.$refs.form.validate()) {
-        this.reminders.unshift({
-          category: this.category,
-          level: this.level,
-          frequency: this.frequency,
-          time: this.time,
-          cycle: "1 of 10",
-        });
-
-        this.dialog = false;
-        this.snackbar = true;
-
-        this.category = "";
-        this.level = "";
-        this.frequency = "";
-
-        const parsed = JSON.stringify(this.reminders);
-        localStorage.setItem("reminders", parsed);
-      }
-    },
-    imageURL(category) {
-      if (category == "Yoga") {
-        return "/img/yoga.jpg";
-      } else if (category == "Meditation") {
-        return "/img/meditate.jpg";
-      } else if (category == "Stress Relief") {
-        return "/img/stress-relief.jpg";
-      } else if (category == "Endurance") {
-        return "/img/endurance.jpg";
-      } else if (category == "Challenge") {
-        return "/img/challenge.jpg";
-      } else if (category == "Muscle Tone/Movement") {
-        return "/img/weight-training.jpg";
-      } else if (category == "Stretching") {
-        return "/img/stretching.jpg";
-      } else if (category == "Nutrition") {
-        return "/img/nutrition.jpg";
-      }
-    },
     checkReminders() {
+      // Get current time for check
       const now = new Date();
-
       const minutes = now.getMinutes();
       const hour = now.getHours();
       const day = now.getDay();
-
+      // Compare current time with each reminder
       this.filteredReminders.forEach((reminder) => {
         const time = reminder.time.split(":");
         if (time[0] == hour && time[1] == minutes) {
           console.log("Reminder found: Display Notification");
-          this.notifyMe(reminder);
+          this.notify(reminder);
         } else {
           console.log("Reminder not found");
         }
@@ -337,18 +329,12 @@ export default {
         return [0, 1, 2, 3, 4, 5, 6];
       }
     },
-    deleteReminder(reminder, index) {
-      this.reminders.splice(index, 1);
-
-      const parsed = JSON.stringify(this.reminders);
-      localStorage.setItem("reminders", parsed);
-    },
   },
   computed: {
     filteredReminders() {
       const now = new Date();
       const day = now.getDay();
-
+      // Only return reminders with matching alarm day
       return this.reminders.filter((reminder) =>
         this.frequencyDays(reminder.frequency).includes(day)
       );
