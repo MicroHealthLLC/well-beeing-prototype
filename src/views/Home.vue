@@ -120,14 +120,12 @@
         </v-card>
       </v-dialog>
     </v-col>
-    <!-- Add Success Message -->
-    <v-snackbar v-model="snackbar" color="success" top
-      >Activity Successfully Added!</v-snackbar
-    >
   </v-row>
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 export default {
   name: "Home",
   data() {
@@ -205,10 +203,10 @@ export default {
         Yoga: "/img/yoga.jpg",
       },
       reminders: [],
-      snackbar: false,
     };
   },
   methods: {
+    ...mapMutations(["SET_SNACKBAR"]),
     async notify(activity) {
       const reg = await navigator.serviceWorker.getRegistration();
       // Let's check if the browser supports notifications
@@ -271,7 +269,11 @@ export default {
         localStorage.setItem("reminders", parsed);
         // Close form and display success message
         this.dialog = false;
-        this.snackbar = true;
+        this.SET_SNACKBAR({
+          show: true,
+          message: "Activity Successfully Added!",
+          color: "success",
+        });
         // Reset form values
         this.resetForm();
       }
@@ -281,6 +283,12 @@ export default {
       // Convert and update reminders array to local storage
       const parsed = JSON.stringify(this.reminders);
       localStorage.setItem("reminders", parsed);
+      // Display successful delete message
+      this.SET_SNACKBAR({
+        show: true,
+        message: "Activity Removed",
+        color: "var(--mh-orange)",
+      });
     },
     resetForm() {
       this.category = "";

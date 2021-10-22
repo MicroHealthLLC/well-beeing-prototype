@@ -17,16 +17,28 @@
         <router-view />
       </v-container>
     </v-main>
+    <v-snackbar v-model="snackbar.show" :color="snackbar.color" top
+      >{{ snackbar.message }}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="white" text v-bind="attrs" @click="CLOSE_SNACKBAR">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-app>
 </template>
 
 <script>
+import { mapGetters, mapMutations } from "vuex";
+
 export default {
   name: "App",
-
-  data: () => ({
-    //
-  }),
+  methods: {
+    ...mapMutations(["CLOSE_SNACKBAR"]),
+  },
+  computed: {
+    ...mapGetters(["snackbar"]),
+  },
 };
 </script>
 
