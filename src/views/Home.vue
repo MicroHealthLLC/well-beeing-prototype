@@ -86,6 +86,13 @@
                 :rules="[(v) => !!v || 'Frequency is required']"
                 required
               ></v-select>
+              <v-select
+                v-model="contentType"
+                label="Content Type"
+                :items="['Articles', 'Blogs', 'Podcasts', 'Videos']"
+                :rules="[(v) => !!v || 'Content Type is required']"
+                required
+              ></v-select>
               <v-menu
                 ref="menu"
                 :close-on-content-click="false"
@@ -145,6 +152,7 @@ export default {
       category: "",
       level: "",
       frequency: "",
+      contentType: "",
       time: null,
       categories: [
         "Challenge",
@@ -186,6 +194,10 @@ export default {
         {
           text: "Time",
           value: "time",
+        },
+        {
+          text: "Content Type",
+          value: "contentType",
         },
         {
           text: "Cycle",
@@ -269,6 +281,7 @@ export default {
           category: this.category,
           level: this.level,
           frequency: this.frequency,
+          contentType: this.contentType,
           time: this.time,
           cycle: "1 of 10",
         });
@@ -302,6 +315,7 @@ export default {
       this.category = "";
       this.level = "";
       this.frequency = "";
+      this.contentType = "";
       this.time = null;
     },
     imageURL(category) {
