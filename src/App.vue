@@ -1,18 +1,24 @@
 <template>
   <v-app>
-    <v-app-bar app color="var(--mh-blue)" dark>
-      <div class="d-flex align-center">
-        <h2>Well Beeing</h2>
-      </div>
+    <v-app-bar absolute app>
+      <img src="./assets/well-being-logo.png" width="150" />
 
-      <v-spacer></v-spacer>
+      <v-tabs color="var(--mh-blue)" slider-size="4" centered>
+        <v-tabs-slider color="var(--mh-green)"></v-tabs-slider>
+        <v-tab to="/"><v-icon class="mr-1">mdi-home</v-icon>Home</v-tab>
+        <v-tab to="/activities"
+          ><v-icon class="mr-1">mdi-yoga</v-icon>Activities</v-tab
+        >
+        <v-tab to="/health"
+          ><v-icon class="mr-1">mdi-heart-pulse</v-icon>Health</v-tab
+        >
+        <v-tab to="/time"><v-icon class="mr-1">mdi-alarm</v-icon>Time</v-tab>
+      </v-tabs>
 
-      <v-btn text>
-        Profile
-      </v-btn>
+      <v-btn icon><v-icon>mdi-account-circle</v-icon></v-btn>
     </v-app-bar>
 
-    <v-main>
+    <v-main class="main-wrapper" app>
       <v-container>
         <router-view />
       </v-container>
@@ -47,5 +53,11 @@ export default {
   --mh-blue: #1d336f;
   --mh-green: #9ec64c;
   --mh-orange: #dd9036;
+}
+.main-wrapper {
+  background-color: #f0f3f7;
+}
+a.v-tab {
+  text-transform: capitalize;
 }
 </style>
