@@ -18,6 +18,22 @@
       <v-btn icon><v-icon>mdi-account-circle</v-icon></v-btn>
     </v-app-bar>
 
+    <v-banner v-if="$route.name == 'Home'" class="welcome-card" dark app>
+      <p class="text-h5 font-weight-bold text-center">
+        Well-Beeing is here to help change your life for the better!
+      </p>
+      <p class="text-subtitle-1 text-center">
+        Whether reminding you to get moving, check your health, or take a
+        mindful moment, Well-Beeing promotes a healthy lifestyle.
+      </p>
+      <p class="text-subtitle-1 text-center">
+        Remember, a better YOU means a better MicroHealth!
+      </p>
+      <div class="d-flex justify-center">
+        <v-btn color="#dd9036">View Activities</v-btn>
+      </div>
+    </v-banner>
+
     <v-main class="main-wrapper" app>
       <v-container>
         <router-view />
@@ -59,5 +75,13 @@ export default {
 }
 a.v-tab {
   text-transform: capitalize;
+}
+.welcome-card {
+  background: rgb(158, 198, 76);
+  background: linear-gradient(
+    341deg,
+    rgba(158, 198, 76, 1) 0%,
+    rgba(29, 51, 111, 1) 100%
+  );
 }
 </style>
