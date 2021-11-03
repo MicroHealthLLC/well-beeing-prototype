@@ -1,5 +1,9 @@
 <template>
-  <h1>Time</h1>
+<div>
+  <span class="text-h6 text-sm-h5">Time</span>
+  <v-divider></v-divider>
+</div>
+  
 </template>
 
 <script>

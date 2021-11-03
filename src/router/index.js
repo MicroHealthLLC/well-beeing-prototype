@@ -4,7 +4,7 @@ import Home from "../views/Home.vue";
 import Activities from "../views/Activities.vue";
 import Health from "../views/Health.vue";
 import Time from "../views/Time.vue";
-
+import Profile from "../views/Profile.vue";
 
 Vue.use(VueRouter);
 
@@ -28,6 +28,11 @@ const routes = [
     path: "/time",
     name: "Time",
     component: Time,
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
   },
   {
     path: "/about",

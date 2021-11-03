@@ -1,23 +1,7 @@
 <template>
   <v-app>
-    <v-app-bar absolute app>
-      <img src="./assets/well-being-logo.png" width="150" />
-
-      <v-tabs color="var(--mh-blue)" slider-size="4" centered>
-        <v-tabs-slider color="var(--mh-green)"></v-tabs-slider>
-        <v-tab to="/"><v-icon class="mr-1">mdi-home</v-icon>Home</v-tab>
-        <v-tab to="/activities"
-          ><v-icon class="mr-1">mdi-yoga</v-icon>Activities</v-tab
-        >
-        <v-tab to="/health"
-          ><v-icon class="mr-1">mdi-heart-pulse</v-icon>Health</v-tab
-        >
-        <v-tab to="/time"><v-icon class="mr-1">mdi-alarm</v-icon>Time</v-tab>
-      </v-tabs>
-
-      <v-btn icon><v-icon>mdi-account-circle</v-icon></v-btn>
-    </v-app-bar>
-
+    <Navbar />
+    <!-- Welcome Banner -->
     <v-banner v-if="$route.name == 'Home'" class="welcome-card" dark app>
       <p class="text-h5 font-weight-bold text-center">
         Well-Beeing is here to help change your life for the better!
@@ -30,15 +14,16 @@
         Remember, a better YOU means a better MicroHealth!
       </p>
       <div class="d-flex justify-center">
-        <v-btn color="#dd9036">View Activities</v-btn>
+        <v-btn color="var(--mh-orange)">View Activities</v-btn>
       </div>
     </v-banner>
-
+    <!-- Main Content -->
     <v-main class="main-wrapper" app>
       <v-container>
         <router-view />
       </v-container>
     </v-main>
+    <!-- Alert Message -->
     <v-snackbar v-model="snackbar.show" :color="snackbar.color" top
       >{{ snackbar.message }}
       <template v-slot:action="{ attrs }">
@@ -52,9 +37,13 @@
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
+import Navbar from "./components/Navbar.vue";
 
 export default {
   name: "App",
+  components: {
+    Navbar,
+  },
   methods: {
     ...mapMutations(["CLOSE_SNACKBAR"]),
   },
@@ -72,9 +61,6 @@ export default {
 }
 .main-wrapper {
   background-color: #f0f3f7;
-}
-a.v-tab {
-  text-transform: capitalize;
 }
 .welcome-card {
   background: rgb(158, 198, 76);
