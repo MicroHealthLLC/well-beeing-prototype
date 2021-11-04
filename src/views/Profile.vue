@@ -1,14 +1,7 @@
 <template>
   <v-row>
     <v-col class="col-12"
-      ><span class="text-h6 text-sm-h5">My Profile</span><v-divider></v-divider
-    ></v-col>
-    <v-col class="col-2">
-      <v-avatar color="var(--mh-orange)" size="128">
-        <span class="white--text text-h2">CC</span>
-      </v-avatar>
-    </v-col>
-    <v-col>
+      ><span class="text-h6 text-sm-h5">My Profile</span><v-divider></v-divider>
       <v-text-field label="First Name"></v-text-field>
       <v-text-field label="Last Name"></v-text-field>
       <v-menu
