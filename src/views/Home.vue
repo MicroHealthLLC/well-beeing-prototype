@@ -30,29 +30,43 @@ export default {
           title: "Title 1",
           text:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-          author: "First Last",
+          author: "First-name Last-name",
           img: "/img/challenge.jpg",
         },
         {
           title: "Title 2",
           text:
             "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-          author: "First Last",
+          author: "First-name Last-name",
           img: "/img/meditate.jpg",
         },
         {
           title: "Title 3",
           text:
             "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-          author: "First Last",
+          author: "First-name Last-name",
           img: "/img/nutrition.jpg",
         },
         {
           title: "Title 4",
           text:
             "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-          author: "First Last",
+          author: "First-name Last-name",
           img: "/img/stress-relief.jpg",
+        },
+        {
+          title: "Title 5",
+          text:
+            "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+          author: "First-name Last-name",
+          img: "/img/weight-training.jpg",
+        },
+        {
+          title: "Title 6",
+          text:
+            "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+          author: "First-name Last-name",
+          img: "/img/endurance.jpg",
         },
       ],
     };

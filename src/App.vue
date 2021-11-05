@@ -155,7 +155,7 @@ export default {
   watch: {
     remindersOn(newSwitchValue, oldSwitchValue) {
       if (newSwitchValue) {
-        this.intervalId = setInterval(this.checkReminders, 10000);
+        this.intervalId = setInterval(this.checkReminders, 60000);
       } else {
         clearInterval(this.intervalId);
         this.intervalId = null;
