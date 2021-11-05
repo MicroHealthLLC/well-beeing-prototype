@@ -45,7 +45,7 @@
               >Test</v-btn
             >
             <v-btn
-              @click="deleteReminder(item, index)"
+              @click="removeReminder(item, index)"
               color="var(--mh-orange)"
               outlined
               x-small
@@ -61,7 +61,6 @@
           </template>
         </v-data-table>
       </v-card>
-
       <!-- Form Dialog -->
       <v-dialog v-model="dialog" max-width="600px">
         <v-card>
@@ -128,7 +127,11 @@
             </v-form>
           </v-card-text>
           <v-card-actions class="d-flex justify-end">
-            <v-btn @click="addReminder" class="px-6" color="var(--mh-blue)" dark
+            <v-btn
+              @click="addNewReminder"
+              class="px-6"
+              color="var(--mh-blue)"
+              dark
               >Submit</v-btn
             >
             <v-btn @click="dialog = false" color="secondary" outlined
@@ -142,14 +145,13 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "Activities",
   data() {
     return {
       dialog: false,
-      remind: false,
       intervalId: null,
       valid: true,
       category: "",
@@ -225,11 +227,11 @@ export default {
         Stretching: "/img/stretching.jpg",
         Yoga: "/img/yoga.jpg",
       },
-      reminders: [],
     };
   },
   methods: {
-    ...mapMutations(["SET_SNACKBAR"]),
+    ...mapActions( ["addReminder", "deleteReminder"]),
+    ...mapMutations(["SET_SNACKBAR", "TOGGLE_REMINDERS_ON"]),
     async notify(activity) {
       const reg = await navigator.serviceWorker.getRegistration();
       // Let's check if the browser supports notifications
@@ -278,41 +280,25 @@ export default {
         this.$refs.form.resetValidation();
       }
     },
-    addReminder() {
+    addNewReminder() {
       if (this.$refs.form.validate()) {
-        this.reminders.unshift({
+        const newReminder = {
           category: this.category,
           level: this.level,
           frequency: this.frequency,
           contentType: this.contentType,
           time: this.time,
           cycle: "1 of 10",
-        });
-        // Convert and add reminders array to local storage
-        const parsed = JSON.stringify(this.reminders);
-        localStorage.setItem("reminders", parsed);
-        // Close form and display success message
+        }
+        // Call Vuex action to add reminder
+        this.addReminder(newReminder)
+        // Close form and reset form values
         this.dialog = false;
-        this.SET_SNACKBAR({
-          show: true,
-          message: "Activity Successfully Added!",
-          color: "var(--mh-green)",
-        });
-        // Reset form values
         this.resetForm();
       }
     },
-    deleteReminder(reminder, index) {
-      this.reminders.splice(index, 1);
-      // Convert and update reminders array to local storage
-      const parsed = JSON.stringify(this.reminders);
-      localStorage.setItem("reminders", parsed);
-      // Display successful delete message
-      this.SET_SNACKBAR({
-        show: true,
-        message: "Activity Removed",
-        color: "var(--mh-orange)",
-      });
+    removeReminder(reminder, index) {
+      this.deleteReminder(index)
     },
     resetForm() {
       this.category = "";
@@ -336,63 +322,20 @@ export default {
         ? "error"
         : "primary";
     },
-    checkReminders() {
-      // Get current time for check
-      const now = new Date();
-      const minutes = now.getMinutes();
-      const hour = now.getHours();
-      const day = now.getDay();
-      // Compare current time with each reminder
-      this.filteredReminders.forEach((reminder) => {
-        const time = reminder.time.split(":");
-        if (time[0] == hour && time[1] == minutes) {
-          console.log("Reminder found: Display Notification");
-          this.notify(reminder);
-        } else {
-          console.log("Reminder not found");
-        }
-      });
-    },
-    frequencyDays(frequency) {
-      if (frequency == "Mon/Wed/Fri") {
-        return [1, 3, 5];
-      } else if (frequency == "Tues/Thurs") {
-        return [2, 4];
-      } else {
-        return [0, 1, 2, 3, 4, 5, 6];
-      }
-    },
   },
   computed: {
-    filteredReminders() {
-      const now = new Date();
-      const day = now.getDay();
-      // Only return reminders with matching alarm day
-      return this.reminders.filter((reminder) =>
-        this.frequencyDays(reminder.frequency).includes(day)
-      );
+    ...mapGetters(["reminders", "remindersOn"]),
+    remind: {
+      get() {
+        return this.remindersOn;
+      },
+      set(value) {
+        this.TOGGLE_REMINDERS_ON(value);
+      },
     },
   },
   mounted() {
-    this.remind = true;
-
-    if (localStorage.getItem("reminders")) {
-      try {
-        this.reminders = JSON.parse(localStorage.getItem("reminders"));
-      } catch (e) {
-        localStorage.removeItem("reminders");
-      }
-    }
-  },
-  watch: {
-    remind(newSwitchValue, oldSwitchValue) {
-      if (newSwitchValue) {
-        this.intervalId = setInterval(this.checkReminders, 60000);
-      } else {
-        clearInterval(this.intervalId);
-        this.intervalId = null;
-      }
-    },
+    //
   },
 };
 </script>
