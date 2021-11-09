@@ -1,10 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import Activities from "../views/Activities.vue";
-import Health from "../views/Health.vue";
-import Time from "../views/Time.vue";
-import Profile from "../views/Profile.vue";
 
 Vue.use(VueRouter);
 
@@ -17,31 +13,25 @@ const routes = [
   {
     path: "/activities",
     name: "Activities",
-    component: Activities,
+    component: () =>
+      import(/* webpackChunkName: "activities" */ "../views/Activities.vue"),
   },
   {
     path: "/health",
     name: "Health",
-    component: Health,
+    component: () =>
+      import(/* webpackChunkName: "health" */ "../views/Health.vue"),
   },
   {
     path: "/time",
     name: "Time",
-    component: Time,
+    component: () => import(/* webpackChunkName: "time" */ "../views/Time.vue"),
   },
   {
     path: "/profile",
     name: "Profile",
-    component: Profile,
-  },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+      import(/* webpackChunkName: "profile" */ "../views/Profile.vue"),
   },
 ];
 
