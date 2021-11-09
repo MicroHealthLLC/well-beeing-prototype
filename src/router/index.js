@@ -23,9 +23,9 @@ const routes = [
       import(/* webpackChunkName: "health" */ "../views/Health.vue"),
   },
   {
-    path: "/time",
-    name: "Time",
-    component: () => import(/* webpackChunkName: "time" */ "../views/Time.vue"),
+    path: "/nutrition",
+    name: "Nutrition",
+    component: () => import(/* webpackChunkName: "nutrition" */ "../views/Nutrition.vue"),
   },
   {
     path: "/profile",
