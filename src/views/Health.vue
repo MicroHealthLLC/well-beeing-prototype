@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <span class="text-h6 text-sm-h5">Resources</span>
+      <div class="text-h6 text-sm-h5 mt-2">Resources</div>
       <v-divider class="mb-4"></v-divider>
 
       <v-card class="mb-6">

@@ -2,7 +2,12 @@
   <v-app>
     <Navbar />
     <!-- Main Content -->
-    <v-main :class="[isActivities ? 'green-bg' : 'light-bg']" app>
+    <v-main
+      :class="[
+        isActivities ? 'green-bg' : isNutrition ? 'blue-bg' : 'light-bg',
+      ]"
+      app
+    >
       <!-- Welcome Banner -->
       <v-sheet v-if="$route.name == 'Home'" class="pa-5 welcome-card" dark app>
         <p class="text-h5 font-weight-bold text-center">
@@ -96,6 +101,9 @@ export default {
     isActivities() {
       return this.$route.name == "Activities";
     },
+    isNutrition() {
+      return this.$route.name == "Nutrition";
+    },
   },
   mounted() {
     this.fetchReminders();
@@ -122,6 +130,9 @@ export default {
 }
 .green-bg {
   background-color: #c9dd94;
+}
+.blue-bg {
+  background-color: #fdefb2;
 }
 .light-bg {
   background-color: #f0f3f7;
