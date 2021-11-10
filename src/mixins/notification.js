@@ -2,13 +2,11 @@ export const notification = {
   data() {
     return {
       imageURLs: {
-        Challenge: "/img/challenge.jpg",
         Endurance: "/img/endurance.jpg",
-        Ergonomics: "",
+        Ergonomics: "img/ergonomics.jpg",
         Meditation: "/img/meditate.jpg",
         "Muscle Tone/Movement": "/img/weight-training.jpg",
-        Nutrition: "/img/nutrition.jpg",
-        Posture: "",
+        Posture: "img/posture.jpg",
         "Stress Relief": "/img/stress-relief.jpg",
         Stretching: "/img/stretching.jpg",
         Yoga: "/img/yoga.jpg",
@@ -18,7 +16,7 @@ export const notification = {
   methods: {
     async notify(activity) {
       const reg = await navigator.serviceWorker.getRegistration();
-      console.log(reg)
+      console.log(reg);
       // Let's check if the browser supports notifications
       if (!("Notification" in window)) {
         alert("This browser does not support desktop notification");
