@@ -26,7 +26,9 @@
         <v-tab to="/health"
           ><v-icon class="mr-1">mdi-heart-pulse</v-icon>Health</v-tab
         >
-        <v-tab to="/time"><v-icon class="mr-1">mdi-alarm</v-icon>Time</v-tab>
+        <v-tab to="/nutrition"
+          ><v-icon class="mr-1">mdi-food-apple</v-icon>Nutrition</v-tab
+        >
       </v-tabs>
 
       <v-menu v-if="!$vuetify.breakpoint.xsOnly" offset-y>
@@ -73,12 +75,12 @@
               <v-list-item-title>Health</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item to="/time" link>
+          <v-list-item to="/nutrition" link>
             <v-list-item-icon>
-              <v-icon>mdi-alarm</v-icon>
+              <v-icon>mdi-food-apple</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>Time</v-list-item-title>
+              <v-list-item-title>Nutrition</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>

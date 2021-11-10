@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <div class="d-sm-flex justify-space-between align-center my-2 my-sm-4">
+      <div class="d-sm-flex justify-space-between align-center mt-2 mb-2 mb-sm-2 mt-sm-4">
         <div class="d-flex justify-space-between align-center">
           <span class="text-h6 text-sm-h5">My Activity Reminders</span>
           <v-switch
@@ -20,6 +20,7 @@
           >Add New</v-btn
         >
       </div>
+      <v-divider class="mb-4"></v-divider>
       <!-- Activity Reminders Table -->
       <v-card class="pa-sm-2">
         <v-data-table :headers="headers" :items="reminders">
@@ -162,24 +163,20 @@ export default {
       contentType: "",
       time: null,
       categories: [
-        "Challenge",
         "Endurance",
         "Ergonomics",
         "Meditation",
         "Muscle Tone/Movement",
-        "Nutrition",
         "Posture",
         "Stress Relief",
         "Stretching",
         "Yoga",
       ],
       categoryIcons: {
-        Challenge: "mdi-trophy-award",
         Endurance: "mdi-run",
         Ergonomics: "mdi-seat-recline-extra",
         Meditation: "mdi-meditation",
         "Muscle Tone/Movement": "mdi-weight-lifter",
-        Nutrition: "mdi-food-apple",
         Posture: "mdi-human-male",
         "Stress Relief": "mdi-head-heart",
         Stretching: "mdi-human",
