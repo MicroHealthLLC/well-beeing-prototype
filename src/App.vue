@@ -2,7 +2,7 @@
   <v-app>
     <Navbar />
     <!-- Main Content -->
-    <v-main class="main-wrapper" app>
+    <v-main :class="[isActivities ? 'green-bg' : 'light-bg']" app>
       <!-- Welcome Banner -->
       <v-sheet v-if="$route.name == 'Home'" class="pa-5 welcome-card" dark app>
         <p class="text-h5 font-weight-bold text-center">
@@ -93,6 +93,9 @@ export default {
         this.frequencyDays(reminder.frequency).includes(day)
       );
     },
+    isActivities() {
+      return this.$route.name == "Activities";
+    },
   },
   mounted() {
     this.fetchReminders();
@@ -117,7 +120,10 @@ export default {
   --mh-green: #9ec64c;
   --mh-orange: #dd9036;
 }
-.main-wrapper {
+.green-bg {
+  background-color: #c9dd94;
+}
+.light-bg {
   background-color: #f0f3f7;
 }
 .welcome-card {
