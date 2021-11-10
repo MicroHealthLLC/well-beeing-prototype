@@ -1,13 +1,13 @@
 <template>
   <v-row>
     <v-col>
-      <span class="text-h6 text-sm-h5">My Goals</span>
+      <span class="text-h6 text-sm-h5">Create Your Own Goals</span>
       <v-divider class="mb-4"></v-divider>
       <v-card class=" pa-4 mb-4" elevation="5">
         <div v-for="(goal, index) in goals" :key="index">
           <div class="grid my-4">
-            <div class="text-subtitle-2">
-              <div>
+            <div class="text-subtitle-2 clickable">
+              <div @click="openGoalForm(goal, index)">
                 <v-icon class="mr-2" color="primary">mdi-flag</v-icon
                 >{{ goal.title }}
               </div>
@@ -33,7 +33,7 @@
         <div class="d-flex justify-end mt-5">
           <v-btn to="/activities" text color="info"
             >Schedule Activity Reminders
-            <v-icon small>mdi-arrow-right</v-icon></v-btn
+            <v-icon class="ml-2" small>mdi-arrow-right</v-icon></v-btn
           >
         </div>
       </v-card>
@@ -95,6 +95,54 @@
         </v-card>
       </div>
     </v-col>
+    <!-- Dialog Form -->
+    <v-dialog v-model="dialog" max-width="600px">
+      <v-card>
+        <v-card-title>Edit Goal</v-card-title>
+        <v-card-text>
+          <v-form ref="form" v-model="valid">
+            <v-text-field
+              v-model="goal.title"
+              label="Title"
+            ></v-text-field>
+            <v-select
+              v-model="goal.category"
+              :items="categories"
+              label="Category"
+            ></v-select>
+            <v-menu
+              v-model="menu"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="goal.due_date"
+                  label="Due Date"
+                  prepend-icon="mdi-calendar"
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                v-model="goal.due_date"
+                @input="menu = false"
+              ></v-date-picker>
+            </v-menu>
+          </v-form>
+        </v-card-text>
+        <v-card-actions class="d-flex justify-end">
+          <v-btn @click="updateGoal" color="var(--mh-blue)" depressed dark
+            >Submit</v-btn
+          >
+          <v-btn @click="closeGoalForm" outlined depressed>Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-row>
 </template>
 
@@ -102,24 +150,43 @@
 export default {
   data() {
     return {
+      dialog: false,
+      valid: true,
+      menu: false,
+      categories: [
+        "Endurance",
+        "Ergonomics",
+        "Meditation",
+        "Muscle Tone/Movement",
+        "Posture",
+        "Stress Relief",
+        "Stretching",
+        "Yoga",
+      ],
+      goal: {
+        title: "",
+        category: "",
+        due_date: "",
+      },
+      goalIndex: 0,
       goals: [
         {
           title: "Improve my flexibility",
           progress: 25,
           category: "Yoga",
-          due_date: "Nov 21",
+          due_date: "2021-11-21",
         },
         {
           title: "Reduce my back pain when working",
           progress: 42,
-          category: "Ergonmics",
-          due_date: "Nov 28",
+          category: "Ergonomics",
+          due_date: "2021-11-26",
         },
         {
           title: "Improve my posture",
           progress: 10,
           category: "Posture",
-          due_date: "Dec 24",
+          due_date: "2021-12-24",
         },
       ],
       articles: [
@@ -193,6 +260,20 @@ export default {
       ],
     };
   },
+  methods: {
+    openGoalForm(goal, index) {
+      this.dialog = true;
+      this.goal = goal;
+      this.goalIndex = index;
+    },
+    closeGoalForm() {
+      this.dialog = false;
+    },
+    updateGoal() {
+      this.goals[this.goalIndex] = this.goal;
+      this.dialog = false;
+    },
+  },
 };
 </script>
 
@@ -216,5 +297,8 @@ export default {
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+.clickable {
+  cursor: pointer;
 }
 </style>

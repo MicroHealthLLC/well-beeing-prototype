@@ -17,13 +17,12 @@
           Whether reminding you to get moving, check your health, or take a
           mindful moment, Well-Beeing promotes a healthy lifestyle.
         </p>
-        <p class="text-subtitle-1 text-center">
-          Remember, a better YOU means a better MicroHealth!
-        </p>
         <div class="d-flex justify-center">
-          <v-btn to="/activities" color="var(--mh-orange)"
-            ><v-icon class="mr-2">mdi-flag</v-icon> Create Your Own Goals</v-btn
-          >
+          <v-chip color="var(--mh-orange)">
+            <span class="text-subtitle-1 text-center">
+              Remember, a better YOU means a better MicroHealth!
+            </span>
+          </v-chip>
         </div>
       </v-sheet>
       <v-container>
