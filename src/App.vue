@@ -17,7 +17,7 @@
         </p>
         <div class="d-flex justify-center">
           <v-btn to="/activities" color="var(--mh-orange)"
-            ><v-icon class="mr-2">mdi-alarm</v-icon> Schedule Reminder</v-btn
+            ><v-icon class="mr-2">mdi-flag</v-icon> Create Your Own Goals</v-btn
           >
         </div>
       </v-sheet>
