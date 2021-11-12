@@ -18,11 +18,9 @@
           mindful moment, Well-Beeing promotes a healthy lifestyle.
         </p>
         <div class="d-flex justify-center">
-          <v-chip color="var(--mh-orange)">
-            <span class="text-subtitle-1 text-center">
-              Remember, a better YOU means a better MicroHealth!
-            </span>
-          </v-chip>
+          <div class="mh-message text-caption text-sm-body-1">
+            Remember, a better YOU means a better MicroHealth!
+          </div>
         </div>
       </v-sheet>
       <v-container>
@@ -143,5 +141,12 @@ export default {
     rgba(158, 198, 76, 1) 0%,
     rgba(29, 51, 111, 1) 100%
   );
+}
+.mh-message {
+  background-color: var(--mh-orange);
+  text-align: center;
+  padding: 5px 10px;
+  border: 1px solid rgb(95, 95, 95);
+  border-radius: 15px;
 }
 </style>
