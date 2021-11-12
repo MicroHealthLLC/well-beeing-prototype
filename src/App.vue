@@ -2,12 +2,7 @@
   <v-app>
     <Navbar />
     <!-- Main Content -->
-    <v-main
-      :class="[
-        isActivities ? 'green-bg' : isNutrition ? 'blue-bg' : 'light-bg',
-      ]"
-      app
-    >
+    <v-main class="main-wrapper" app>
       <!-- Welcome Banner -->
       <v-sheet v-if="$route.name == 'Home'" class="pa-5 welcome-card" dark app>
         <p class="text-h5 font-weight-bold text-center">
@@ -95,12 +90,6 @@ export default {
         this.frequencyDays(reminder.frequency).includes(day)
       );
     },
-    isActivities() {
-      return this.$route.name == "Activities";
-    },
-    isNutrition() {
-      return this.$route.name == "Nutrition";
-    },
   },
   mounted() {
     this.fetchReminders();
@@ -125,13 +114,7 @@ export default {
   --mh-green: #9ec64c;
   --mh-orange: #dd9036;
 }
-.green-bg {
-  background-color: #c9dd94;
-}
-.blue-bg {
-  background-color: #fdefb2;
-}
-.light-bg {
+.main-wrapper {
   background-color: #f0f3f7;
 }
 .welcome-card {
