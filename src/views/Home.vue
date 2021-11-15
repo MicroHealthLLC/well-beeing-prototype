@@ -1,6 +1,7 @@
 <template>
   <v-row>
     <v-col>
+      <!-- Goals Table -->
       <span class="text-h6 text-sm-h5">Create Your Own Goals</span>
       <v-divider class="mb-4"></v-divider>
       <v-card class=" pa-4 mb-4" elevation="5">
@@ -21,7 +22,7 @@
               </div>
             </div>
             <v-slider
-              class="d-flex align-center"
+              class="d-flex align-center mt-10 mt-sm-0"
               v-model="goal.progress"
               thumb-label="always"
               hide-details
@@ -31,7 +32,11 @@
           <v-divider v-if="index != goals.length - 1"></v-divider>
         </div>
         <div class="d-flex justify-end mt-5">
-          <v-btn to="/activities" text color="info"
+          <v-btn
+            to="/activities"
+            text
+            color="info"
+            :small="$vuetify.breakpoint.xsOnly"
             >Schedule Activity Reminders
             <v-icon class="ml-2" small>mdi-arrow-right</v-icon></v-btn
           >
@@ -101,10 +106,7 @@
         <v-card-title>Edit Goal</v-card-title>
         <v-card-text>
           <v-form ref="form" v-model="valid">
-            <v-text-field
-              v-model="goal.title"
-              label="Title"
-            ></v-text-field>
+            <v-text-field v-model="goal.title" label="Title"></v-text-field>
             <v-select
               v-model="goal.category"
               :items="categories"
@@ -297,6 +299,11 @@ export default {
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 .clickable {
   cursor: pointer;

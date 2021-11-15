@@ -2,12 +2,7 @@
   <v-app>
     <Navbar />
     <!-- Main Content -->
-    <v-main
-      :class="[
-        isActivities ? 'green-bg' : isNutrition ? 'blue-bg' : 'light-bg',
-      ]"
-      app
-    >
+    <v-main class="main-wrapper" app>
       <!-- Welcome Banner -->
       <v-sheet v-if="$route.name == 'Home'" class="pa-5 welcome-card" dark app>
         <p class="text-h5 font-weight-bold text-center">
@@ -18,11 +13,9 @@
           mindful moment, Well-Beeing promotes a healthy lifestyle.
         </p>
         <div class="d-flex justify-center">
-          <v-chip color="var(--mh-orange)">
-            <span class="text-subtitle-1 text-center">
-              Remember, a better YOU means a better MicroHealth!
-            </span>
-          </v-chip>
+          <div class="mh-message text-caption text-sm-body-1">
+            Remember, a better YOU means a better MicroHealth!
+          </div>
         </div>
       </v-sheet>
       <v-container>
@@ -97,12 +90,6 @@ export default {
         this.frequencyDays(reminder.frequency).includes(day)
       );
     },
-    isActivities() {
-      return this.$route.name == "Activities";
-    },
-    isNutrition() {
-      return this.$route.name == "Nutrition";
-    },
   },
   mounted() {
     this.fetchReminders();
@@ -127,13 +114,7 @@ export default {
   --mh-green: #9ec64c;
   --mh-orange: #dd9036;
 }
-.green-bg {
-  background-color: #c9dd94;
-}
-.blue-bg {
-  background-color: #fdefb2;
-}
-.light-bg {
+.main-wrapper {
   background-color: #f0f3f7;
 }
 .welcome-card {
@@ -143,5 +124,12 @@ export default {
     rgba(158, 198, 76, 1) 0%,
     rgba(29, 51, 111, 1) 100%
   );
+}
+.mh-message {
+  background-color: var(--mh-orange);
+  text-align: center;
+  padding: 5px 10px;
+  border: 1px solid rgb(95, 95, 95);
+  border-radius: 15px;
 }
 </style>
